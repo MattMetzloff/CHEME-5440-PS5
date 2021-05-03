@@ -1,11 +1,11 @@
 # Example for use of DifferentialEquations.jl
 # CHEME5440/7770 - Spring 2021
 # To install the package, use the following commands inside the Julia REPL:
-using Pkg
-Pkg.add("DifferentialEquations")
+#using Pkg
+#Pkg.add("DifferentialEquations")
 # For this example, you will also need Plots; To add:
-Pkg.add("Plots")
-# ------------------------------------------------------------ #
+#Pkg.add("Plots")
+## ------------------------------------------------------------ #
 # Lorenz system example
 # dX/dt = σ(Y-X)
 # dY/dt = X(ρ - Z) - Y
@@ -23,7 +23,7 @@ l=1
 
 kbp = 1.0
 kb = 0.0
-VRmax = 294.282
+VRmax = 917.032
 a1p = 1/(1+l)
 a1m = l/(1+l)
 abp = 0.1
@@ -45,15 +45,15 @@ k1m = 1.0
 # that the function will modify values in one or more of the function arguments.  In this case,
 # lorenz! will modify values in the input vector, du
 #function lorenz!(du,u,p,t)
- du[1] = σ*(u[2]-u[1])                  #dX/dt = σ(Y-X)
- du[2] = u[1]*(ρ-u[3]) - u[2]           #dY/dt = X(ρ - Z) - Y
- du[3] = u[1]*u[2] - β*u[3]             #dZ/dt = XY - βZ
+# du[1] = σ*(u[2]-u[1])                  #dX/dt = σ(Y-X)
+# du[2] = u[1]*(ρ-u[3]) - u[2]           #dY/dt = X(ρ - Z) - Y
+# du[3] = u[1]*u[2] - β*u[3]             #dZ/dt = XY - βZ
 
 
 function adapt!(du,u,p,t)
  du[1] = (kbp*u[7])+(kb*u[6])-(VRmax)
- du[2] = (VRmax)+(a1p*u[3])-(a1m*u[2])-(abp*u[2]*u[5])+(dbp*u[7])-(ab*u[2]*u[4])+(db*u[6])
- du[3] = (a1m*u[2])-(a1p*u[3])+(B1*u[7])+(B1*u[6])
+ du[2] = (a1p*u[3])-(a1m*u[2])-(abp*u[2]*u[5])+(dbp*u[7])-(ab*u[2]*u[4])+(db*u[6])
+ du[3] = (VRmax)+(a1m*u[2])-(a1p*u[3])+(B1*u[7])+(B1*u[6])
  du[4] = (kb*u[6])-(ab*u[2]*u[4])+(db*u[6])+(B1*u[6])-(k1pxA*u[4])+(k1m*u[5])
  du[5] = (kbp*u[7])-(abp*u[2]*u[5])+(dbp*u[7])+(B1*u[7])+(k1pxA*u[4])-(k1m*u[5])
  du[6] = (ab*u[2]*u[4])-(db*u[6])-(kb*u[6])-(B1*u[6])
@@ -69,13 +69,16 @@ E1sB_ss = 921.107                     # initial(ss) value of E1sB
 E1sBp_ss = 917.032                    # initial(ss) value of E1sBp
 
 u0 = [E0_ss; E1s_ss; E1_ss; B_ss; Bp_ss; E1sB_ss; E1sBp_ss]       # initial(ss) state vector
-tspan = (0.0,100.0)                     #time interval (start time, end time)
+tspan = (0.0,1000.0)                     #time interval (start time, end time)
 prob = ODEProblem(adapt!,u0,tspan)      #Create an ODE problem for the Lorenz fxn
 sol = solve(prob)                       #Solve the system
 # ------------- MAKE SOME PLOTS OF THE RESULTS WITH PLOTS.jl ---------------------
 #Plot the results; X, Y, and Z vs time
-#plt1 = plot(sol, xaxis="time", yaxis = "X, Y, or Z", label=["X" "Y" "Z"])
-#display(plt1)
+##toplot=(sol,vars=(0,2))/(E1s_ss)
+
+plt1 = plot(sol,vars=(0,2), xaxis="time", yaxis = "Estar", label=["Estar"])
+display(plt1)
+
 #Plot the results; the vars=(0,3) argument specifies to plot Z (column 3 of sol)
 #vs t
 #plt2 = plot(sol,vars=(0,3), xaxis="time", yaxis = "Z", legend = false)
