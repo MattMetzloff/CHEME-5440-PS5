@@ -23,15 +23,15 @@ l=1
 
 kbp = 1.0
 kb = 0.0
-VRmax = 917.032
+VRmax = 0.02
 a1p = 1/(1+l)
 a1m = l/(1+l)
 abp = 0.1
 dbp = 0.01
-ab = 1.0
+ab = 1000.0
 db = 1.0
 B1 = (2.5*l)/(1+l)
-k1pxA = 10.0
+k1p = 1.0
 k1m = 1.0
 
 
@@ -54,27 +54,27 @@ function adapt!(du,u,p,t)
  du[1] = (kbp*u[7])+(kb*u[6])-(VRmax)
  du[2] = (a1p*u[3])-(a1m*u[2])-(abp*u[2]*u[5])+(dbp*u[7])-(ab*u[2]*u[4])+(db*u[6])
  du[3] = (VRmax)+(a1m*u[2])-(a1p*u[3])+(B1*u[7])+(B1*u[6])
- du[4] = (kb*u[6])-(ab*u[2]*u[4])+(db*u[6])+(B1*u[6])-(k1pxA*u[4])+(k1m*u[5])
- du[5] = (kbp*u[7])-(abp*u[2]*u[5])+(dbp*u[7])+(B1*u[7])+(k1pxA*u[4])-(k1m*u[5])
+ du[4] = (kb*u[6])-(ab*u[2]*u[4])+(db*u[6])+(B1*u[6])-(k1p*u[2]*u[4])+(k1m*u[5])
+ du[5] = (kbp*u[7])-(abp*u[2]*u[5])+(dbp*u[7])+(B1*u[7])+(k1p*u[2]*u[4])-(k1m*u[5])
  du[6] = (ab*u[2]*u[4])-(db*u[6])-(kb*u[6])-(B1*u[6])
- du[7] = (abp*u[7])-(dbp*u[7])-(kbp*u[7])-(B1*u[7])
+ du[7] = (abp*u[2]*u[5])-(dbp*u[7])-(kbp*u[7])-(B1*u[7])
 end
 # ------------- SOLVE THE MODEL WITH DIFFERENTIALEQUATIONS.jl -------------------
-E0_ss = 1709.65                       # initial(ss) value of E0
-E1s_ss = 11.3987                      # initial(ss) value of E1s
-E1_ss = 6440.81                       # initial(ss) value of E1
-B_ss = 181.818                        # initial(ss) value of B
-Bp_ss = 1818.18                       # initial(ss) value of Bp
-E1sB_ss = 921.107                     # initial(ss) value of E1sB
-E1sBp_ss = 917.032                    # initial(ss) value of E1sBp
+E0_ss = 7.9                       # initial(ss) value of E0
+E1s_ss = 0.103                      # initial(ss) value of E1s
+E1_ss = 0.02                       # initial(ss) value of E1
+B_ss = 0.0190                        # initial(ss) value of B
+Bp_ss = 0.00196                       # initial(ss) value of Bp
+E1sB_ss = 1.96                     # initial(ss) value of E1sB
+E1sBp_ss = 0.02                    # initial(ss) value of E1sBp
 
 u0 = [E0_ss; E1s_ss; E1_ss; B_ss; Bp_ss; E1sB_ss; E1sBp_ss]       # initial(ss) state vector
-tspan = (0.0,1000.0)                     #time interval (start time, end time)
+tspan = (0.0,10.0)                     #time interval (start time, end time)
 prob = ODEProblem(adapt!,u0,tspan)      #Create an ODE problem for the Lorenz fxn
 sol = solve(prob)                       #Solve the system
 # ------------- MAKE SOME PLOTS OF THE RESULTS WITH PLOTS.jl ---------------------
 #Plot the results; X, Y, and Z vs time
-##toplot=(sol,vars=(0,2))/(E1s_ss)
+
 
 plt1 = plot(sol,vars=(0,2), xaxis="time", yaxis = "Estar", label=["Estar"])
 display(plt1)
