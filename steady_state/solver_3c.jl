@@ -15,11 +15,10 @@ using DifferentialEquations     # Include DifferentialEquations.jl
 using Plots                     # Include Plots.jl for plotting
 gr(show = true)                 # Use the gr backend for plotting and show plots
 # Model parameters
-#σ = 5.5
-#ρ = 22.0   #.0 indicates to the compiler that ρ is a floating-point number (i.e. not an integer)
-#β = 7/3
 
-l=1
+l=10.0
+#change this to get the different plots. Use 0.01, 0.1, 1, 10
+
 
 kbp = 1.0
 kb = 0.0
@@ -58,18 +57,19 @@ function adapt!(du,u,p,t)
  du[5] = (kbp*u[7])-(abp*u[2]*u[5])+(dbp*u[7])+(B1*u[7])+(k1p*u[2]*u[4])-(k1m*u[5])
  du[6] = (ab*u[2]*u[4])-(db*u[6])-(kb*u[6])-(B1*u[6])
  du[7] = (abp*u[2]*u[5])-(dbp*u[7])-(kbp*u[7])-(B1*u[7])
+ 
 end
 # ------------- SOLVE THE MODEL WITH DIFFERENTIALEQUATIONS.jl -------------------
-E0_ss = 7.9                       # initial(ss) value of E0
-E1s_ss = 0.103                      # initial(ss) value of E1s
-E1_ss = 0.02                       # initial(ss) value of E1
-B_ss = 0.0190                        # initial(ss) value of B
-Bp_ss = 0.00196                       # initial(ss) value of Bp
-E1sB_ss = 1.96                     # initial(ss) value of E1sB
+E0_ss = -49.82158                       # initial(ss) value of E0
+E1s_ss = 50.8055                      # initial(ss) value of E1s
+E1_ss = 0.02000                      # initial(ss) value of E1
+B_ss = 7.8258e-5                        # initial(ss) value of B
+Bp_ss = 0.0039759                      # initial(ss) value of Bp
+E1sB_ss = 3.975945606                     # initial(ss) value of E1sB
 E1sBp_ss = 0.02                    # initial(ss) value of E1sBp
 
 u0 = [E0_ss; E1s_ss; E1_ss; B_ss; Bp_ss; E1sB_ss; E1sBp_ss]       # initial(ss) state vector
-tspan = (0.0,10.0)                     #time interval (start time, end time)
+tspan = (0.0,120000.0)                     #time interval (start time, end time)
 prob = ODEProblem(adapt!,u0,tspan)      #Create an ODE problem for the Lorenz fxn
 sol = solve(prob)                       #Solve the system
 # ------------- MAKE SOME PLOTS OF THE RESULTS WITH PLOTS.jl ---------------------
