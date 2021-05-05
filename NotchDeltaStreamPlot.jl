@@ -11,8 +11,8 @@ AbstractPlotting.inline!(true)
 # D2: active delta in cell 2
 function precise_adapt(D1, D2)
     
-    u = 1/((1+10(D2^2/(0.1+D2^2))^2)^2) - D1    #dD1/dt
-    v = 1/((1+10(D1^2/(0.1+D1^2))^2)^2) - D2    #dD2/dt
+    u = 1/(1+10(D2^2/(0.1+D2^2))^2) - D1    #dD1/dt
+    v = 1/(1+10(D1^2/(0.1+D1^2))^2) - D2    #dD2/dt
     
     return Point(u,v)
 end
